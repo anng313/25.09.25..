@@ -12,7 +12,14 @@ fontprop = fm.FontProperties(fname=font_path)
 plt.rc('font', family=fontprop.get_name())
 
 
+
 st.title('함수 그래프 그리기')
+
+# 퀴즈 페이지로 이동 버튼
+st.markdown('---')
+st.subheader('함수 그래프 퀴즈')
+if st.button('함수 그래프 퀴즈 풀러가기'):
+	st.switch_page('pages/quiz.py')
 
 
 st.write('아래에 함수를 입력하세요. 예: sin(x), x**2, exp(-x)')
