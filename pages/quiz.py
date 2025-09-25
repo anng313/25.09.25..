@@ -23,7 +23,8 @@ quiz_funcs = [
 ]
 
 
-# 문제 수 관리
+
+# 문제 수 관리 및 중복 방지
 MAX_QUIZ = 10
 if 'quiz_started' not in st.session_state:
     st.session_state['quiz_started'] = False
@@ -35,17 +36,21 @@ if 'quiz_num' not in st.session_state:
     st.session_state['quiz_num'] = 1
 if 'quiz_score' not in st.session_state:
     st.session_state['quiz_score'] = 0
+if 'quiz_history' not in st.session_state:
+    st.session_state['quiz_history'] = set()
 
 
 if st.button('퀴즈 시작'):
     st.session_state['quiz_started'] = True
     st.session_state['quiz_num'] = 1
     st.session_state['quiz_score'] = 0
-    # 정답 함수 선택
-    answer_idx = random.randint(0, len(quiz_funcs)-1)
-    answer_func = quiz_funcs[answer_idx]
+    st.session_state['quiz_history'] = set()
+    # 중복 없는 정답 함수 선택
+    available_funcs = [f for f in quiz_funcs if f[0] not in st.session_state['quiz_history']]
+    answer_func = random.choice(available_funcs)
+    st.session_state['quiz_history'].add(answer_func[0])
     # 오답 함수 3개 선택 (중복 없이)
-    wrong_funcs = random.sample([f for i, f in enumerate(quiz_funcs) if i != answer_idx], 3)
+    wrong_funcs = random.sample([f for f in quiz_funcs if f[0] != answer_func[0]], 3)
     # 섞기
     all_choices = wrong_funcs + [answer_func]
     random.shuffle(all_choices)
@@ -73,24 +78,37 @@ if st.session_state['quiz_started']:
             ax.text(0.5, 0.5, '그래프 오류', ha='center', va='center')
         cols[i].pyplot(fig)
     selected = st.radio('정답 그래프를 선택하세요', options=[f'그래프 {i+1}' for i in range(4)], key=f'radio_{st.session_state["quiz_num"]}')
-    if st.button('정답 확인'):
+    if 'answer_checked' not in st.session_state:
+        st.session_state['answer_checked'] = False
+    if st.button('정답 확인') and not st.session_state['answer_checked']:
         answer_idx = [i for i, (fs, _) in enumerate(st.session_state['quiz_choices']) if fs == st.session_state['quiz_answer']][0]
         if selected == f'그래프 {answer_idx+1}':
             st.success('정답입니다!')
             st.session_state['quiz_score'] += 1
         else:
             st.error(f'오답입니다. 정답은 그래프 {answer_idx+1} 입니다.')
-        # 다음 문제로 이동
+        st.session_state['answer_checked'] = True
+
+    # 정답 확인 후에만 다음 문제 버튼 활성화
+    if st.session_state['answer_checked']:
         if st.session_state['quiz_num'] < MAX_QUIZ:
-            st.session_state['quiz_num'] += 1
-            # 다음 문제 세팅
-            answer_idx = random.randint(0, len(quiz_funcs)-1)
-            answer_func = quiz_funcs[answer_idx]
-            wrong_funcs = random.sample([f for i, f in enumerate(quiz_funcs) if i != answer_idx], 3)
-            all_choices = wrong_funcs + [answer_func]
-            random.shuffle(all_choices)
-            st.session_state['quiz_answer'] = answer_func[0]
-            st.session_state['quiz_choices'] = all_choices
+            if st.button('다음 문제'):
+                st.session_state['quiz_num'] += 1
+                # 중복 없는 정답 함수 선택
+                available_funcs = [f for f in quiz_funcs if f[0] not in st.session_state['quiz_history']]
+                if available_funcs:
+                    answer_func = random.choice(available_funcs)
+                    st.session_state['quiz_history'].add(answer_func[0])
+                else:
+                    # 모든 함수가 출제되었으면 랜덤
+                    answer_func = random.choice(quiz_funcs)
+                wrong_funcs = random.sample([f for f in quiz_funcs if f[0] != answer_func[0]], 3)
+                all_choices = wrong_funcs + [answer_func]
+                random.shuffle(all_choices)
+                st.session_state['quiz_answer'] = answer_func[0]
+                st.session_state['quiz_choices'] = all_choices
+                st.session_state['answer_checked'] = False
+                st.rerun()
         else:
             st.session_state['quiz_started'] = False
             st.markdown(f'### 퀴즈 종료! 점수: {st.session_state["quiz_score"]} / {MAX_QUIZ}')
