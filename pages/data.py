@@ -5,11 +5,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
-# NanumGothic 폰트 경로 지정
-font_path = '/workspaces/25.09.25../fonts/NanumGothic-Regular.ttf'
-fontprop = fm.FontProperties(fname=font_path)
 
-plt.rc('font', family=fontprop.get_name())
+# NanumGothic 폰트 경로 지정 및 예외처리
+import os
+font_path = '/workspaces/25.09.25../fonts/NanumGothic-Regular.ttf'
+try:
+	if os.path.exists(font_path):
+		fontprop = fm.FontProperties(fname=font_path)
+		plt.rc('font', family=fontprop.get_name())
+	else:
+		fontprop = None
+except Exception:
+	fontprop = None
 
 
 
