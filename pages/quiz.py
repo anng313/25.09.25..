@@ -49,13 +49,10 @@ st.markdown(
         <div class="quiz-emoji">🧩📊</div>
         <div class="quiz-title">함수 그래프 퀴즈</div>
         <div class="quiz-desc">함수식에 맞는 그래프를 골라보세요!<br>직관력과 관찰력을 키워봐요.</div>
-        <div class="quiz-btn-wrap" id="quiz-btn-wrap"></div>
         <hr style="border:1px solid #eaeaea; margin:2em 0;">
     </div>
     ''', unsafe_allow_html=True)
 
-# 퀴즈 시작 버튼을 카드 안에 표시
-quiz_start = st.button('퀴즈 시작', key='quiz_start_btn')
 
 quiz_funcs = [
     ('sin(x)', lambda x: np.sin(x)),
