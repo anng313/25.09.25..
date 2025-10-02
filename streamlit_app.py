@@ -40,7 +40,7 @@ st.markdown(
 	<div class="main-card">
 		<div class="emoji">📚✨</div>
 		<div class="main-title">함수에 대해 알아보아요!</div>
-		<div class="main-desc">오른쪽 목록을 클릭하여<br>함수를 그려보거나 퀴즈를 맞춰보세요.</div>
+	<div class="main-desc">왼쪽 목록을 클릭하여<br>함수를 그려보거나 퀴즈를 맞춰보세요.</div>
 		<hr style="border:1px solid #eaeaea; margin:2em 0;">
 		<div style="text-align:center; color:#888; font-size:1em;">수학적 직관을 키우는 첫걸음!</div>
 	</div>
