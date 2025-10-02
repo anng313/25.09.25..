@@ -9,7 +9,53 @@ font_path = '/workspaces/25.09.25../fonts/NanumGothic-Regular.ttf'
 fontprop = fm.FontProperties(fname=font_path)
 plt.rc('font', family=fontprop.get_name())
 
-st.title('함수 그래프 퀴즈')
+
+
+st.markdown(
+    '''
+    <style>
+    .quiz-card {
+        background: white;
+        border-radius: 18px;
+        box-shadow: 0 4px 16px rgba(44,108,223,0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin: 2rem auto 1.5rem auto;
+        max-width: 650px;
+    }
+    .quiz-title {
+        text-align: center;
+        color: #2d6cdf;
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+    }
+    .quiz-emoji {
+        font-size: 2.2em;
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+    .quiz-desc {
+        text-align: center;
+        font-size: 1.1em;
+        color: #444;
+        margin-bottom: 1.5em;
+    }
+    .quiz-btn-wrap {
+        text-align: center;
+        margin-bottom: 1em;
+    }
+    </style>
+    <div class="quiz-card">
+        <div class="quiz-emoji">🧩📊</div>
+        <div class="quiz-title">함수 그래프 퀴즈</div>
+        <div class="quiz-desc">함수식에 맞는 그래프를 골라보세요!<br>직관력과 관찰력을 키워봐요.</div>
+        <div class="quiz-btn-wrap" id="quiz-btn-wrap"></div>
+        <hr style="border:1px solid #eaeaea; margin:2em 0;">
+    </div>
+    ''', unsafe_allow_html=True)
+
+# 퀴즈 시작 버튼을 카드 안에 표시
+quiz_start = st.button('퀴즈 시작', key='quiz_start_btn')
 
 quiz_funcs = [
     ('sin(x)', lambda x: np.sin(x)),
