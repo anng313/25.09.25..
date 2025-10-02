@@ -4,10 +4,18 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import random
 
-# NanumGothic 폰트 경로 지정
+
+# NanumGothic 폰트 경로 지정 및 예외처리
+import os
 font_path = '/workspaces/25.09.25../fonts/NanumGothic-Regular.ttf'
-fontprop = fm.FontProperties(fname=font_path)
-plt.rc('font', family=fontprop.get_name())
+if os.path.exists(font_path):
+    try:
+        fontprop = fm.FontProperties(fname=font_path)
+        plt.rc('font', family=fontprop.get_name())
+    except Exception:
+        fontprop = None
+else:
+    fontprop = None
 
 
 
