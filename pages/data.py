@@ -51,11 +51,11 @@ try:
 except Exception:
 	x_min, x_max = -10.0, 10.0
 
-num_points = st.slider('샘플 포인트 수', min_value=100, max_value=2000, value=500)
+
 
 if func_str:
 	try:
-		x = np.linspace(x_min, x_max, num_points)
+		x = np.linspace(x_min, x_max, 500)
 		# 안전하게 eval을 사용하기 위해 numpy 함수만 허용
 		allowed_names = {k: getattr(np, k) for k in dir(np) if not k.startswith('_')}
 		allowed_names['x'] = x
